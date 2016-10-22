@@ -1,0 +1,7 @@
+#eclipse config file
+RemoteSystemsTempFiles
+.metadata
+.svn
+.settings
+.project
+target
