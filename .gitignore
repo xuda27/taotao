@@ -1,5 +1,6 @@
 #eclipse config file
 RemoteSystemsTempFiles
+.classpath
 .metadata
 .svn
 .settings
