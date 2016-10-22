@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.eden.taotao.pojo.DataGridResult;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.service.ItemService;
 
@@ -18,5 +19,11 @@ public class ItemController {
 	@ResponseBody
 	public TbItem getItemById(@PathVariable Long id) {
 		return itemService.getItemById(id);
+	}
+	
+	@RequestMapping("/item/list")
+	@ResponseBody
+	public DataGridResult getItemsByPage(long page, long rows) {
+		return itemService.getItemsByPage(page, rows);
 	}
 }
