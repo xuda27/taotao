@@ -1,9 +1,6 @@
 package cn.eden.taotao.test;
 
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.SocketException;
-
 import org.apache.commons.net.ftp.FTPClient;
 import org.junit.Test;
 
@@ -27,7 +24,7 @@ public class FtpTest {
 		ftpClient.changeWorkingDirectory("/home/ftpuser/www/images");
 		//指定上传类型
 		ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-		ftpClient.storeFile("girl.jpg", fis);
+		ftpClient.storeFile("1.jpg", fis);
 		//5.退出登录
 		ftpClient.logout();
 		
