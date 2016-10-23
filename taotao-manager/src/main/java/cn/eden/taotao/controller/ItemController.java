@@ -21,6 +21,13 @@ public class ItemController {
 		return itemService.getItemById(id);
 	}
 	
+	/**
+	 * 获取商品信息<br>
+	 * 后台获取分页控件自动提交的两个参数rows每页显示的记录数和page当前第几页
+	 * @param page 当前第几页
+	 * @param rows 每页显示的记录数
+	 * @return 具有page、rows的pojo
+	 */
 	@RequestMapping("/item/list")
 	@ResponseBody
 	public DataGridResult getItemsByPage(long page, long rows) {
