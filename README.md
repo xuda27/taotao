@@ -11,3 +11,36 @@
         private List<?> rows;
         ```
 
+## day02
+1. 商品类目选择
+	- 技术要点：
+		- 为了迎合EasyUi树形菜单的特点需要创建如下pojo 
+		```java
+        private long id;
+		private String text;
+		private String state;
+        ```
+2. 搭建ftp服务器（使用nginx）
+3. 完成商品图片上传功能
+	- 技术要点：
+		1. 使用了commons-net包中的FTPClient类进行图片上传(相关知识点参见PictureService.java和FtpUtil.java)
+		2. 迎合[kindeditor上传图片的特点](http://kindeditor.net/docs/upload.html)创建如下pojo：
+		```java
+        private int error;
+		private String url;
+		private String message;
+        ```
+		并设置两个静态方法方便返回结果是调用
+		```java
+		//成功时调用的方法
+		public static PictureResult ok(String url) {
+			return new PictureResult(0, url, null);
+		}
+		//失败时调用的方法
+		public static PictureResult error(String message) {
+			return new PictureResult(1, null, message);
+		}
+		```
+
+
+
