@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.eden.taotao.pojo.DataGridResult;
 import cn.eden.taotao.pojo.TbItem;
+import cn.eden.taotao.pojo.TbItemDesc;
 import cn.eden.taotao.service.ItemService;
+import cn.eden.taotao.util.TaotaoResult;
 
 @Controller
 public class ItemController {
@@ -32,5 +34,19 @@ public class ItemController {
 	@ResponseBody
 	public DataGridResult getItemsByPage(long page, long rows) {
 		return itemService.getItemsByPage(page, rows);
+	}
+	
+	/**
+	 * 商品添加
+	 * @param item 商品信息
+	 * @param desc 商品描述信息
+	 * @return TaotaoResult
+	 */
+	@RequestMapping("/item/save")
+	@ResponseBody
+	public TaotaoResult addItem(TbItem item, String desc) {
+		TbItemDesc itemDesc = new TbItemDesc();
+		itemDesc.setItemDesc(desc);
+		return itemService.addItem(item, itemDesc); 
 	}
 }
