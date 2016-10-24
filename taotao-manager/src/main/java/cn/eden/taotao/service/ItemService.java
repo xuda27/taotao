@@ -13,4 +13,6 @@ public interface ItemService {
 	//临时
 	TbItemDesc listItemDesc(long itemId);
 	TaotaoResult updateItem(TbItem item, TbItemDesc itemDesc);
+	
+	TaotaoResult deleteItem(String ids);
 }

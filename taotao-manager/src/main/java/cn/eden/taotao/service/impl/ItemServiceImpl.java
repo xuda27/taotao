@@ -1,5 +1,6 @@
 package cn.eden.taotao.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -108,6 +109,31 @@ public class ItemServiceImpl implements ItemService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		return TaotaoResult.ok();
+	}
+
+	@Override
+	public TaotaoResult deleteItem(String ids) {
+		try {
+			String[] idsArray = ids.split(",");
+			List<Long> values = new ArrayList<Long>();
+			for(String id : idsArray) {
+				values.add(Long.parseLong(id));
+			}
+			TbItemExample e = new TbItemExample();
+			cn.eden.taotao.pojo.TbItemExample.Criteria c = e.createCriteria();
+			c.andIdIn(values);
+			itemMapper.deleteByExample(e);
+			
+			
+			TbItemDescExample de = new TbItemDescExample();
+			Criteria dc = de.createCriteria();
+			dc.andItemIdIn(values);
+			itemDescMapper.deleteByExample(de);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 		return TaotaoResult.ok();
 	}

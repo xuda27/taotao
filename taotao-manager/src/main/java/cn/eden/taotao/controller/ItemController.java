@@ -74,4 +74,15 @@ public class ItemController {
 		itemDesc.setItemDesc(desc);
 		return itemService.updateItem(item, itemDesc);
 	}
+	
+	/**
+	 * 商品删除
+	 * @param ids
+	 * @return TaotaoResult
+	 */
+	@RequestMapping("/rest/item/delete")
+	@ResponseBody
+	public TaotaoResult deleteItem(String ids) {
+		return itemService.deleteItem(ids);
+	}
 }
