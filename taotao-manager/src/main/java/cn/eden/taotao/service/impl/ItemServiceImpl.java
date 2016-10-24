@@ -14,6 +14,8 @@ import cn.eden.taotao.mapper.TbItemMapper;
 import cn.eden.taotao.pojo.DataGridResult;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemDesc;
+import cn.eden.taotao.pojo.TbItemDescExample;
+import cn.eden.taotao.pojo.TbItemDescExample.Criteria;
 import cn.eden.taotao.pojo.TbItemExample;
 import cn.eden.taotao.service.ItemService;
 import cn.eden.taotao.util.ExceptionUtil;
@@ -77,4 +79,38 @@ public class ItemServiceImpl implements ItemService {
 		return TaotaoResult.ok();
 	}
 
+	
+	@Override
+	public TbItemDesc listItemDesc(long itemId) {
+		return itemDescMapper.selectByPrimaryKey(itemId);
+	}
+
+	@Override
+	public TaotaoResult updateItem(TbItem item, TbItemDesc itemDesc) {
+		try {
+			//更新商品
+			TbItemExample e = new TbItemExample();
+			cn.eden.taotao.pojo.TbItemExample.Criteria c = e.createCriteria();
+			c.andIdEqualTo(item.getId());
+			item.setCreated(new Date());
+			item.setUpdated(new Date());
+			item.setStatus((byte)1);
+			itemMapper.updateByExample(item, e);
+			
+			//更新商品描述
+			TbItemDescExample de = new TbItemDescExample();
+			Criteria dc = de.createCriteria();
+			dc.andItemIdEqualTo(item.getId());
+			itemDesc.setItemId(item.getId());
+			itemDesc.setCreated(new Date());
+			itemDesc.setUpdated(new Date());
+			itemDescMapper.updateByExample(itemDesc, de);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		return TaotaoResult.ok();
+	}
+
+	
 }

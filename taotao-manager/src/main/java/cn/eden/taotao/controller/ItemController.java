@@ -49,4 +49,29 @@ public class ItemController {
 		itemDesc.setItemDesc(desc);
 		return itemService.addItem(item, itemDesc); 
 	}
+	
+	/**
+	 * 加载商品描述
+	 * @param id
+	 * @return TbItemDesc
+	 */
+	@RequestMapping("/rest/item/query/item/desc/{id}")
+	@ResponseBody
+	public TbItemDesc listItemDesc(@PathVariable Long id) {
+		return itemService.listItemDesc(id);
+	}
+	
+	/**
+	 * 更新商品和商品描述
+	 * @param item
+	 * @param desc
+	 * @return TaotaoResult
+	 */
+	@RequestMapping("/rest/item/update")
+	@ResponseBody
+	public TaotaoResult updateItem(TbItem item, String desc) {
+		TbItemDesc itemDesc = new TbItemDesc();
+		itemDesc.setItemDesc(desc);
+		return itemService.updateItem(item, itemDesc);
+	}
 }
