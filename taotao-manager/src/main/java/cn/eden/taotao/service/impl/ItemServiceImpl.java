@@ -12,12 +12,14 @@ import com.github.pagehelper.PageInfo;
 
 import cn.eden.taotao.mapper.TbItemDescMapper;
 import cn.eden.taotao.mapper.TbItemMapper;
+import cn.eden.taotao.mapper.TbItemParamItemMapper;
 import cn.eden.taotao.pojo.DataGridResult;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemDesc;
 import cn.eden.taotao.pojo.TbItemDescExample;
 import cn.eden.taotao.pojo.TbItemDescExample.Criteria;
 import cn.eden.taotao.pojo.TbItemExample;
+import cn.eden.taotao.pojo.TbItemParamItem;
 import cn.eden.taotao.service.ItemService;
 import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.IDUtils;
@@ -33,6 +35,8 @@ public class ItemServiceImpl implements ItemService {
 	private TbItemMapper itemMapper;
 	@Autowired
 	private TbItemDescMapper itemDescMapper;
+	@Autowired
+	private TbItemParamItemMapper itemParamItemMapper;
 
 	@Override
 	public TbItem getItemById(Long id) {
@@ -56,7 +60,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public TaotaoResult addItem(TbItem item, TbItemDesc itemDesc) {
+	public TaotaoResult addItem(TbItem item, TbItemDesc itemDesc, String itemParam) {
 		try {
 			//生成商品id
 			//可以使用redis的自增长key,没有redis之前使用时间+随机数策略生成
@@ -73,6 +77,11 @@ public class ItemServiceImpl implements ItemService {
 			itemDesc.setCreated(new Date());
 			itemDesc.setUpdated(new Date());
 			itemDescMapper.insert(itemDesc);
+			//itemParamItem
+			TaotaoResult result = insertItemParamItem(itemId, itemParam);
+			if(result.getStatus() != 200) {
+				throw new Exception();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
@@ -138,5 +147,23 @@ public class ItemServiceImpl implements ItemService {
 		return TaotaoResult.ok();
 	}
 
-	
+	/**
+	 * 添加商品规格
+	 * @param itemId
+	 * @param itemParam
+	 * @return TaotaoResult
+	 */
+	private TaotaoResult insertItemParamItem(Long itemId, String itemParam) {
+		//创建一个pojo
+		TbItemParamItem itemParamItem = new TbItemParamItem();
+		itemParamItem.setItemId(itemId);
+		itemParamItem.setParamData(itemParam);
+		itemParamItem.setCreated(new Date());
+		itemParamItem.setUpdated(new Date());
+		//向表中插入数据
+		itemParamItemMapper.insert(itemParamItem);
+		
+		return TaotaoResult.ok();
+		
+	}
 }

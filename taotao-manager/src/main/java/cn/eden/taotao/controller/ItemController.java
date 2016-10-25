@@ -44,10 +44,10 @@ public class ItemController {
 	 */
 	@RequestMapping("/item/save")
 	@ResponseBody
-	public TaotaoResult addItem(TbItem item, String desc) {
+	public TaotaoResult addItem(TbItem item, String desc, String itemParams) {
 		TbItemDesc itemDesc = new TbItemDesc();
 		itemDesc.setItemDesc(desc);
-		return itemService.addItem(item, itemDesc); 
+		return itemService.addItem(item, itemDesc, itemParams); 
 	}
 	
 	/**

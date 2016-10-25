@@ -24,7 +24,7 @@ public class FtpTest {
 		ftpClient.changeWorkingDirectory("/home/ftpuser/www/images");
 		//指定上传类型
 		ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
-		ftpClient.storeFile("1.jpg", fis);
+		ftpClient.storeFile("3.jpg", fis);
 		//5.退出登录
 		ftpClient.logout();
 		
