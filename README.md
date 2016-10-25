@@ -47,7 +47,7 @@
 1. 商品添加
 2. 商品更新
 3. 商品批量删除
-	-技术要点：参见 item-*.jsp、ItemServiceImpl.java
+	- 技术要点：参见 item-*.jsp、ItemServiceImpl.java
 
 
 
