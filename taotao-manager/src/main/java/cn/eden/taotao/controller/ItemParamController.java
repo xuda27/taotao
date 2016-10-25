@@ -1,6 +1,7 @@
 package cn.eden.taotao.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.eden.taotao.pojo.ItemParam;
 import cn.eden.taotao.pojo.TbItemParam;
 import cn.eden.taotao.service.ItemParamService;
 import cn.eden.taotao.util.TaotaoResult;
@@ -32,5 +34,11 @@ public class ItemParamController {
 		itemParam.setCreated(new Date());
 		itemParam.setUpdated(new Date());
 		return itemParamService.insertItemParam(itemParam);
+	}
+	
+	@RequestMapping("/item/param/list")
+	@ResponseBody
+	public List<ItemParam>  getItemParams() {
+		return itemParamService.getItemParams();
 	}
 }

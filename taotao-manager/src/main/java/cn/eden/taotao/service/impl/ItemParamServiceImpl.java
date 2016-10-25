@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.eden.taotao.mapper.ItemParamMapper;
 import cn.eden.taotao.mapper.TbItemParamMapper;
+import cn.eden.taotao.pojo.ItemParam;
 import cn.eden.taotao.pojo.TbItemParam;
 import cn.eden.taotao.pojo.TbItemParamExample;
 import cn.eden.taotao.pojo.TbItemParamExample.Criteria;
@@ -16,7 +18,8 @@ import cn.eden.taotao.util.TaotaoResult;
 public class ItemParamServiceImpl implements ItemParamService {
 	@Autowired
 	private TbItemParamMapper itemParamMapper;
-	
+	@Autowired
+	private ItemParamMapper ipm;
 	
 	@Override
 	public TaotaoResult getItemParamByCid(Long cid) {
@@ -39,6 +42,12 @@ public class ItemParamServiceImpl implements ItemParamService {
 			return TaotaoResult.ok();
 		}
 		return null;
+	}
+
+
+	@Override
+	public List<ItemParam>  getItemParams() {
+		return ipm.getItemParams();
 	}
 
 }
