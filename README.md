@@ -49,5 +49,32 @@
 3. 商品批量删除
 	- 技术要点：参见 item-*.jsp、ItemServiceImpl.java
 
+## day04
+1. 规格参数模板的创建、列表查询
+2. 商品规格参数的添加
+3. 更新商品添加功能
+	- 技术要点：
+		1. 前端参见WEF-INF下jsp相关文件，common.js
+		2. 后端参见ItemParamServiceImpl.java等
+		3. 查询商品规格参数时，用到了简单的双表连接，用mybatis简单实现：
+	```xml
+	<resultMap id="BaseResultMap" type="cn.eden.taotao.pojo.ItemParam">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="item_cat_id" property="itemCatId" jdbcType="BIGINT" />
+		<result column="created" property="created" jdbcType="TIMESTAMP" />
+		<result column="updated" property="updated" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="param_data" property="paramData" jdbcType="LONGVARCHAR" />
+	</resultMap>	
+	<select id="getItemParams" resultMap="BaseResultMap">
+		SELECT
+			p.*, c.`name`
+		FROM
+			tb_item_param p
+		LEFT JOIN tb_item_cat c ON p.item_cat_id = c.id
+	</select>
+	```
+
+
 
 
