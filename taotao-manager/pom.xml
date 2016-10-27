@@ -14,7 +14,7 @@
 	<dependencies>
 		<!-- 通用部分 -->
 		<dependency>
-			<groupId>com.taotao</groupId>
+			<groupId>cn.eden</groupId>
 			<artifactId>taotao-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

@@ -28,6 +28,6 @@
 	</bean>
 	<!-- 配置扫描包，加载mapper代理对象 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="cn.eden.taotao.rest.mapper" />
+		<property name="basePackage" value="cn.eden.taotao.mapper" />
 	</bean>
 </beans>
