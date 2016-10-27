@@ -74,6 +74,32 @@
 		LEFT JOIN tb_item_cat c ON p.item_cat_id = c.id
 	</select>
 	```
+##day05
+1. 创建了portal前台门户工程，rest服务层工程
+2. 商品分类展示
+	- 技术要点：
+		1. 由于portal只负责页面展示，它请求的数据必须要向rest中取。所以这里遇到了ajax访问json数据的跨域问题，这里采用jsonp技术。
+		2. **什么是jsonp？**Json跨域请求数据是不可以的，但是js跨域请求js脚本是可以的。可以把json数据封装成一个js语句，做一个方法的调用。  
+		3. json数据格式大致：![](http://i.imgur.com/GEu4560.png)
+		4. 创建两个pojo，一个是返回值pojo，另一个分类节点pojo
+			```java
+				public class CatResult {
+					private List<?> data;	
+				}
+				public class CatNode {
+					@JsonProperty("n")
+					private String name;
+					@JsonProperty("u")
+					private String url;
+					@JsonProperty("i")
+					private List<?> item;
+				}
+			```
+		5. 具体业务实现参见ItemCatServiceImpl.java
+		6. 为了防止数据的乱码问题，在Controller的requestMapping中添加如下：
+		`@RequestMapping(value="/itemcat/all", produces=MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")`
+
+		
 
 
 
