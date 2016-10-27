@@ -43,11 +43,11 @@
 		```
 
 ## day03
-
 1. 商品添加
 2. 商品更新
 3. 商品批量删除
 	- 技术要点：参见 item-*.jsp、ItemServiceImpl.java
+
 
 ## day04
 1. 规格参数模板的创建、列表查询
@@ -74,7 +74,9 @@
 		LEFT JOIN tb_item_cat c ON p.item_cat_id = c.id
 	</select>
 	```
-##day05
+
+
+## day05
 1. 创建了portal前台门户工程，rest服务层工程
 2. 商品分类展示
 	- 技术要点：
