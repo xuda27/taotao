@@ -1,4 +1,4 @@
-package cn.eden.taotao.controller;
+package cn.eden.taotao.manager.controller;
 
 import java.util.Date;
 import java.util.List;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.eden.taotao.pojo.ItemParam;
+import cn.eden.taotao.manager.pojo.ItemParam;
+import cn.eden.taotao.manager.service.ItemParamService;
 import cn.eden.taotao.pojo.TbItemParam;
-import cn.eden.taotao.service.ItemParamService;
 import cn.eden.taotao.util.TaotaoResult;
 
 @Controller

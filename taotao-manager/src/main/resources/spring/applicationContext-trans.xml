@@ -32,6 +32,6 @@
 	<!-- 切面 -->
 	<aop:config>
 		<aop:advisor advice-ref="txAdvice"
-			pointcut="execution(* cn.eden.taotao.service.*.*(..))" />
+			pointcut="execution(* cn.eden.taotao.manager.service.*.*(..))" />
 	</aop:config>
 </beans>

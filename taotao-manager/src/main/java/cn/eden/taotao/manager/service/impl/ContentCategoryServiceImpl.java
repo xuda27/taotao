@@ -1,4 +1,4 @@
-package cn.eden.taotao.service.impl;
+package cn.eden.taotao.manager.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,12 +7,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.eden.taotao.manager.pojo.ContentCatTreeNode;
+import cn.eden.taotao.manager.service.ContentCategoryService;
 import cn.eden.taotao.mapper.TbContentCategoryMapper;
 import cn.eden.taotao.pojo.TbContentCategory;
 import cn.eden.taotao.pojo.TbContentCategoryExample;
 import cn.eden.taotao.pojo.TbContentCategoryExample.Criteria;
-import cn.eden.taotao.pojo.ContentCatTreeNode;
-import cn.eden.taotao.service.ContentCategoryService;
 import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.TaotaoResult;
 

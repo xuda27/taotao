@@ -1,4 +1,4 @@
-package cn.eden.taotao.service.impl;
+package cn.eden.taotao.manager.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.eden.taotao.manager.pojo.TreeNode;
+import cn.eden.taotao.manager.service.ItemCatService;
 import cn.eden.taotao.mapper.TbItemCatMapper;
 import cn.eden.taotao.pojo.TbItemCat;
 import cn.eden.taotao.pojo.TbItemCatExample;
 import cn.eden.taotao.pojo.TbItemCatExample.Criteria;
-import cn.eden.taotao.pojo.TreeNode;
-import cn.eden.taotao.service.ItemCatService;
 
 @Service
 public class ItemCatServiceImpl implements ItemCatService {

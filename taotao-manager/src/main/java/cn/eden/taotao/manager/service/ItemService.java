@@ -1,5 +1,5 @@
-package cn.eden.taotao.service;
-import cn.eden.taotao.pojo.DataGridResult;
+package cn.eden.taotao.manager.service;
+import cn.eden.taotao.manager.pojo.DataGridResult;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemDesc;
 import cn.eden.taotao.pojo.TbItemParamItem;

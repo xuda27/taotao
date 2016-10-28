@@ -1,4 +1,4 @@
-package cn.eden.taotao.service.impl;
+package cn.eden.taotao.manager.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import cn.eden.taotao.manager.pojo.DataGridResult;
+import cn.eden.taotao.manager.service.ItemService;
 import cn.eden.taotao.mapper.TbItemDescMapper;
 import cn.eden.taotao.mapper.TbItemMapper;
 import cn.eden.taotao.mapper.TbItemParamItemMapper;
-import cn.eden.taotao.pojo.DataGridResult;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemDesc;
 import cn.eden.taotao.pojo.TbItemDescExample;
 import cn.eden.taotao.pojo.TbItemDescExample.Criteria;
 import cn.eden.taotao.pojo.TbItemExample;
 import cn.eden.taotao.pojo.TbItemParamItem;
-import cn.eden.taotao.service.ItemService;
 import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.IDUtils;
 import cn.eden.taotao.util.TaotaoResult;

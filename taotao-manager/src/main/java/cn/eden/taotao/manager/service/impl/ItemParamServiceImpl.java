@@ -1,17 +1,17 @@
-package cn.eden.taotao.service.impl;
+package cn.eden.taotao.manager.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.eden.taotao.mapper.ItemParamMapper;
+import cn.eden.taotao.manager.mapper.ItemParamMapper;
+import cn.eden.taotao.manager.pojo.ItemParam;
+import cn.eden.taotao.manager.service.ItemParamService;
 import cn.eden.taotao.mapper.TbItemParamMapper;
-import cn.eden.taotao.pojo.ItemParam;
 import cn.eden.taotao.pojo.TbItemParam;
 import cn.eden.taotao.pojo.TbItemParamExample;
 import cn.eden.taotao.pojo.TbItemParamExample.Criteria;
-import cn.eden.taotao.service.ItemParamService;
 import cn.eden.taotao.util.TaotaoResult;
 
 @Service

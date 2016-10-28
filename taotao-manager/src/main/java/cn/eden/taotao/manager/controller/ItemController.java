@@ -1,4 +1,4 @@
-package cn.eden.taotao.controller;
+package cn.eden.taotao.manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.eden.taotao.pojo.DataGridResult;
+import cn.eden.taotao.manager.pojo.DataGridResult;
+import cn.eden.taotao.manager.service.ItemService;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemDesc;
-import cn.eden.taotao.service.ItemService;
 import cn.eden.taotao.util.TaotaoResult;
 
 @Controller

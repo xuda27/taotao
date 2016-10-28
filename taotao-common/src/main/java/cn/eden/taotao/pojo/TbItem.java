@@ -2,6 +2,11 @@ package cn.eden.taotao.pojo;
 
 import java.util.Date;
 
+/**
+ * 实体类
+ * @author eden
+ *
+ */
 public class TbItem {
     private Long id;
 

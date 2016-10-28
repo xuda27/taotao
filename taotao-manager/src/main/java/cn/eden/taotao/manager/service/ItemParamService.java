@@ -1,8 +1,8 @@
-package cn.eden.taotao.service;
+package cn.eden.taotao.manager.service;
 
 import java.util.List;
 
-import cn.eden.taotao.pojo.ItemParam;
+import cn.eden.taotao.manager.pojo.ItemParam;
 import cn.eden.taotao.pojo.TbItemParam;
 import cn.eden.taotao.util.TaotaoResult;
 

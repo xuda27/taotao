@@ -56,25 +56,16 @@
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 	</dependencies>
-<!-- 	<build>
-		如果不添加此节点mybatis的mapper.xml文件都会被漏掉。
+	<build>
+		<!--这个元素描述了项目相关的所有资源路径列表，例如和项目相关的属性文件，这些资源被包含在最终的打包文件里。 -->
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.properties</include>
-					<include>**/*.xml</include>
-				</includes>
-				<filtering>false</filtering>
-			</resource>
-			<resource>
+				<!-- 描述存放资源的目录，该路径相对POM路径 -->
 				<directory>src/main/java</directory>
 				<includes>
-					<include>**/*.java</include>
 					<include>**/*.xml</include>
 				</includes>
-				<filtering>false</filtering>
 			</resource>
 		</resources>
-	</build> -->
+	</build>
 </project>

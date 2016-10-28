@@ -1,4 +1,4 @@
-package cn.eden.taotao.controller;
+package cn.eden.taotao.manager.controller;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.eden.taotao.pojo.TreeNode;
-import cn.eden.taotao.service.ItemCatService;
+import cn.eden.taotao.manager.pojo.TreeNode;
+import cn.eden.taotao.manager.service.ItemCatService;
 
 @Controller
 public class ItemCatController {

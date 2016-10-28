@@ -1,4 +1,4 @@
-package cn.eden.taotao.pojo;
+package cn.eden.taotao.manager.pojo;
 
 public class ContentCatTreeNode extends TreeNode {
 	private Long parentId;

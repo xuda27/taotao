@@ -1,4 +1,4 @@
-package cn.eden.taotao.service.impl;
+package cn.eden.taotao.manager.service.impl;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.eden.taotao.pojo.PictureResult;
-import cn.eden.taotao.service.PictureService;
+import cn.eden.taotao.manager.pojo.PictureResult;
+import cn.eden.taotao.manager.service.PictureService;
 import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.FtpUtil;
 import cn.eden.taotao.util.IDUtils;

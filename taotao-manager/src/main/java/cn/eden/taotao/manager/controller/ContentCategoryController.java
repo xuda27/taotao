@@ -1,4 +1,4 @@
-package cn.eden.taotao.controller;
+package cn.eden.taotao.manager.controller;
 
 import java.util.List;
 
@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.eden.taotao.pojo.ContentCatTreeNode;
-import cn.eden.taotao.pojo.TreeNode;
-import cn.eden.taotao.service.ContentCategoryService;
+import cn.eden.taotao.manager.pojo.ContentCatTreeNode;
+import cn.eden.taotao.manager.service.ContentCategoryService;
 import cn.eden.taotao.util.TaotaoResult;
 
 /**
@@ -23,7 +22,7 @@ import cn.eden.taotao.util.TaotaoResult;
 @Controller
 public class ContentCategoryController {
 	@Autowired
-	private ContentCategoryService contentCategoryService;
+	private ContentCategoryService  contentCategoryService;
 
 	@RequestMapping("/content/category/list")
 	@ResponseBody

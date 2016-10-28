@@ -1,4 +1,4 @@
-package cn.eden.taotao.pojo;
+package cn.eden.taotao.manager.pojo;
 /**
  * 上传图片的返回结果pojo
  * @author Eden

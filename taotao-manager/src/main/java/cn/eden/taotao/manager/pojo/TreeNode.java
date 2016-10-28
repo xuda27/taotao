@@ -1,4 +1,4 @@
-package cn.eden.taotao.pojo;
+package cn.eden.taotao.manager.pojo;
 
 public class TreeNode {
 	private long id;
