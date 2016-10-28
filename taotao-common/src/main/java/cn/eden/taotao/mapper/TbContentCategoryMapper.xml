@@ -103,6 +103,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.eden.taotao.pojo.TbContentCategory" >
+  	<selectKey keyProperty="id" resultType="long" order="AFTER">
+  		select LAST_INSERT_ID()
+  	</selectKey>
     insert into tb_content_category (id, parent_id, name, 
       status, sort_order, is_parent, 
       created, updated)
