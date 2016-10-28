@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.eden.taotao.pojo.ContentCatTreeNode;
 import cn.eden.taotao.pojo.TreeNode;
 import cn.eden.taotao.service.ContentCategoryService;
 import cn.eden.taotao.util.TaotaoResult;
@@ -26,7 +27,7 @@ public class ContentCategoryController {
 
 	@RequestMapping("/content/category/list")
 	@ResponseBody
-	List<TreeNode> getCategoryList(
+	List<ContentCatTreeNode> getCategoryList(
 			@RequestParam(value = "id", defaultValue = "0") long parentId) {
 		return contentCategoryService.getCategoryList(parentId);
 	}
@@ -35,5 +36,17 @@ public class ContentCategoryController {
 	@ResponseBody
 	TaotaoResult insertContentCategory(Long parentId, String name) {
 		return contentCategoryService.insertContentCategory(parentId, name);
+	}
+	
+	/**
+	 * 删除节点
+	 * @param parentId
+	 * @param id
+	 * @return TaotaoResult
+	 */
+	@RequestMapping(value = "/content/category/delete", method = RequestMethod.POST)
+	@ResponseBody
+	TaotaoResult deleteContentCategory(Long parentId, Long id) {
+		return contentCategoryService.deleteContentCategory(parentId, id);
 	}
 }

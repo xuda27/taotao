@@ -11,7 +11,7 @@ import cn.eden.taotao.mapper.TbContentCategoryMapper;
 import cn.eden.taotao.pojo.TbContentCategory;
 import cn.eden.taotao.pojo.TbContentCategoryExample;
 import cn.eden.taotao.pojo.TbContentCategoryExample.Criteria;
-import cn.eden.taotao.pojo.TreeNode;
+import cn.eden.taotao.pojo.ContentCatTreeNode;
 import cn.eden.taotao.service.ContentCategoryService;
 import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.TaotaoResult;
@@ -29,7 +29,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	private TbContentCategoryMapper contentCategoryMapper;
 
 	@Override
-	public List<TreeNode> getCategoryList(long parentId) {
+	public List<ContentCatTreeNode> getCategoryList(long parentId) {
 		// 根据parentId查询数据库
 		TbContentCategoryExample example = new TbContentCategoryExample();
 		Criteria criteria = example.createCriteria();
@@ -37,12 +37,13 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		List<TbContentCategory> list = contentCategoryMapper
 				.selectByExample(example);
 		// 创建返回值list 并包装数据
-		List<TreeNode> listResult = new ArrayList<TreeNode>();
+		List<ContentCatTreeNode> listResult = new ArrayList<ContentCatTreeNode>();
 		for (TbContentCategory contentCategory : list) {
-			TreeNode node = new TreeNode();
+			ContentCatTreeNode node = new ContentCatTreeNode();
 			node.setId(contentCategory.getId());
 			node.setState(contentCategory.getIsParent() ? "closed" : "open");
 			node.setText(contentCategory.getName());
+			node.setParentId(parentId);
 			listResult.add(node);
 		}
 		return listResult;
@@ -77,6 +78,27 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
 		}
 		return TaotaoResult.ok(contentCategory);
+	}
+
+	@Override
+	public TaotaoResult deleteContentCategory(long parentId, long id) {
+		contentCategoryMapper.deleteByPrimaryKey(id);
+		// 判断父节点下是否还有子节点
+		TbContentCategoryExample example = new TbContentCategoryExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andParentIdEqualTo(parentId);
+		List<TbContentCategory> list = contentCategoryMapper
+				.selectByExample(example);
+		// 父节点
+		TbContentCategory parentCat = contentCategoryMapper
+				.selectByPrimaryKey(parentId);
+		// 如果没有子节点，设置为false
+		if (list != null && list.size() > 0) {
+			parentCat.setIsParent(true);
+		} else {
+			parentCat.setIsParent(false);
+		}
+		return TaotaoResult.ok();
 	}
 
 }
