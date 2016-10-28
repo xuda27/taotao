@@ -1,5 +1,6 @@
 package cn.eden.taotao.manager.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import cn.eden.taotao.pojo.TbContent;
 import cn.eden.taotao.pojo.TbContentExample;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemExample;
+import cn.eden.taotao.util.TaotaoResult;
 
 /**
  * 内容管理
@@ -40,6 +42,14 @@ public class ContentServiceImpl implements ContentService {
 		PageInfo<TbContent> pageInfo = new PageInfo<TbContent>(rows);
 		dgr.setTotal(pageInfo.getTotal());
 		return dgr;
+	}
+
+	@Override
+	public TaotaoResult insertContent(TbContent content) {
+		content.setCreated(new Date());
+		content.setUpdated(new Date());
+		contentMapper.insert(content);
+		return TaotaoResult.ok();
 	}
 
 }
