@@ -101,4 +101,22 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		return TaotaoResult.ok();
 	}
 
+	@Override
+	public TaotaoResult updateContentCategory(long id, String name) {
+		TbContentCategory tcc = contentCategoryMapper.selectByPrimaryKey(id);
+		//创建新的pojo
+		TbContentCategory contentCategory = new TbContentCategory();
+		contentCategory.setCreated(tcc.getCreated());
+		contentCategory.setId(id);
+		contentCategory.setIsParent(tcc.getIsParent());
+		contentCategory.setName(name);
+		contentCategory.setParentId(tcc.getParentId());
+		contentCategory.setSortOrder(tcc.getSortOrder());
+		contentCategory.setStatus(tcc.getStatus());
+		contentCategory.setUpdated(new Date());
+		
+		contentCategoryMapper.updateByPrimaryKey(contentCategory);
+		return TaotaoResult.ok();
+	}
+
 }
