@@ -144,13 +144,14 @@
 		 1. httpClientUtil.java封装了httpClient包相关方法。
 		 2. 业务具体实现参见taotao-portal的ContentServiceImpl.java
 		 3. 控制层，通过调用service层方法获得json数据，创建逻辑视图model，从而在前台jsp界面实现。
+
 			```java
-				@RequestMapping("/index")
-				public String showIndex(Model model) {
-					String adJson = contentService.getContentList();
-					model.addAttribute("ad1", adJson);
-					return "index";
-				}
+			@RequestMapping("/index")
+			public String showIndex(Model model) {
+				String adJson = contentService.getContentList();
+				model.addAttribute("ad1", adJson);
+				return "index";
+			}
 			```
 
         
