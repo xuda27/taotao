@@ -101,8 +101,68 @@
 		6. 为了防止数据的乱码问题，在Controller的requestMapping中添加如下：
 		`@RequestMapping(value="/itemcat/all", produces=MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")`
 
-		
+## day06
 
+ 1. 内容分类管理：实现内容分类节点增删改
+	  - 技术要点： 
+         1. 内容分类也是 迎合EasyUITree菜单的特点，另外业务中的分类节点必须要添加父节点（parentId），所以重新创建了pojo(TreeNode是树形菜单的基本节点结构)：
+         
+	         ```java
+	        public class ContentCatTreeNode extends TreeNode {
+	        	private Long parentId;
+	        	public Long getParentId() {
+	        		return parentId;
+	        	}
+	        	public void setParentId(Long parentId) {
+	        		this.parentId = parentId;
+	        	}
+	        }
+			```
+ 2. 内容管理：内容管理分页查询（分页查询还是运用到了分页插件）及内容的增加。内容主要是给前台的大广告位提供数据服务。
+	- 技术要点：
+		- 内容管理分页查询业务代码:
+   
+		```java
+		@Override
+		public DataGridResult getContentsByPage(long page, long pageSize) {
+		    TbContentExample example = new TbContentExample();
+		    // 开始分页
+		    PageHelper.startPage((int) page, (int) pageSize);
+		    // 获取查询结果
+		    List<TbContent> rows = contentMapper.selectByExample(example);
+		    DataGridResult dgr = new DataGridResult();
+		    dgr.setRows(rows);
+		    // 获取分页信息 商品总数信息
+		    PageInfo<TbContent> pageInfo = new PageInfo<TbContent>(rows);
+		    dgr.setTotal(pageInfo.getTotal());
+		    return dgr;
+		}
+		```     
+ 3. rest服务层发布内容（大广告位）的数据服务：参见taotao-rest中ContentServiceImpl.java
+ 4. 前台portal层通过httpClient来调用rest服务层的服务:
+	 - 技术要点：
+		 1. httpClientUtil.java封装了httpClient包相关方法。
+		 2. 业务具体实现参见taotao-portal的ContentServiceImpl.java
+		 3. 控制层，通过调用service层方法获得json数据，创建逻辑视图model，从而在前台jsp界面实现。
+			```java
+				@RequestMapping("/index")
+				public String showIndex(Model model) {
+					String adJson = contentService.getContentList();
+					model.addAttribute("ad1", adJson);
+					return "index";
+				}
+			```
+
+        
+
+
+      
+
+  
+
+  
+
+		
 
 
 
