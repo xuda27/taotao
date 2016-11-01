@@ -5,5 +5,5 @@ import java.util.List;
 import cn.eden.taotao.pojo.TbContent;
 
 public interface ContentService {
-	List<TbContent> getContentList(long contentCid);
+	List<TbContent> getContentList(long contentCategoryId);
 }

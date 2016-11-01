@@ -27,15 +27,15 @@ public class ContentServiceImpl implements ContentService {
 	private TbContentMapper contentMapper;
 	@Autowired
 	private JedisClient jedisClient;
-	@Value("INDEX_CONTENT_REDIS_KEY")
+	@Value("${INDEX_CONTENT_REDIS_KEY}")
 	private String INDEX_CONTENT_REDIS_KEY;
 
 	@Override
-	public List<TbContent> getContentList(long contentCid) {
+	public List<TbContent> getContentList(long contentCategoryId) {
 		try {
 			// 从缓存中取内容
 			String result = jedisClient.hget(INDEX_CONTENT_REDIS_KEY,
-					contentCid + "");
+					contentCategoryId + "");
 			if (!StringUtils.isBlank(result)) {
 				// 把字符串转换成list
 				List<TbContent> resultList = JsonUtils.jsonToList(result,
@@ -49,14 +49,15 @@ public class ContentServiceImpl implements ContentService {
 		// 根据内容分类id查询内容列表
 		TbContentExample example = new TbContentExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andCategoryIdEqualTo(contentCid);
+		criteria.andCategoryIdEqualTo(contentCategoryId);
 		// 执行查询
 		List<TbContent> list = contentMapper.selectByExample(example);
 
 		try {
-			//向缓存中添加内容
+			// 向缓存中添加内容
 			String cacheString = JsonUtils.objectToJson(list);
-			jedisClient.hset(INDEX_CONTENT_REDIS_KEY, contentCid + "", cacheString);
+			jedisClient.hset(INDEX_CONTENT_REDIS_KEY, contentCategoryId + "",
+					cacheString);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
