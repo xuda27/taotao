@@ -6,3 +6,4 @@ RemoteSystemsTempFiles
 .settings
 .project
 target
+bin
