@@ -22,7 +22,7 @@ public class RedisServiceImpl implements RedisService {
 	private String INDEX_CONTENT_REDIS_KEY;
 	
 	/**
-	 * 前台修改内容时调用此服务，删除redis中的该内容的内容分类下的全部内容
+	 * 
 	 */
 	@Override
 	public TaotaoResult syncContent(long contentCategoryId) {

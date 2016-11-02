@@ -154,6 +154,102 @@
 			}
 			```
 
+## day07
+
+1. 使用redis做缓存
+2. 将jedis整合到spring中
+3. 缓存添加至业务代码中
+	1. rest工程发布redis服务，portal工程通过HttpClient调用rest工程业务。
+	2. rest工程添加大广告位功能添加redis逻辑，大致：
+		- 首先查询redis数据库是否存在数据，如果有直接返回数据
+		- 如果没有，则调用mysql查询，查询出的数据在返回前，增至redis数据库中
+	3. 后台manager工程redis逻辑：后台添加大广告位内容后，需要删除redis中全部该大广告位内容的内容分类下的所有内容。
+
+
+
+```java
+	//前台业务service层
+	public String getContentList() {
+		// 调用服务层 查询商品内容信息（即大广告位）
+		String result = HttpClientUtil.doGet(REST_BASE_URL + REST_INDEX_AD_URL);
+		try {
+			// 把字符串转换成TaotaoResult
+			TaotaoResult taotaoResult = TaotaoResult.formatToList(result, TbContent.class);
+			// 取出内容列表
+			List<TbContent> list = (List<TbContent>) taotaoResult.getData();
+			List<Map> resultList = new ArrayList<Map>(); 
+			// 创建一个jsp页码要求的pojo列表
+			for(TbContent tbContent : list) {
+				Map map = new HashMap();
+				map.put("srcB", tbContent.getPic2());
+				map.put("height", 240);
+				map.put("alt", tbContent.getTitle());
+				map.put("width", 670);
+				map.put("src", tbContent.getPic());
+				map.put("widthB", 550);
+				map.put("href", tbContent.getUrl());
+				map.put("heightB", 240);
+				resultList.add(map);
+			}
+			return JsonUtils.objectToJson(resultList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	//rest服务层 添加大广告位显示redis的逻辑
+	@Override
+	public List<TbContent> getContentList(long contentCategoryId) {
+		try {
+			// 从缓存中取内容
+			String result = jedisClient.hget(INDEX_CONTENT_REDIS_KEY,
+					contentCategoryId + "");
+			if (!StringUtils.isBlank(result)) {
+				// 把字符串转换成list
+				List<TbContent> resultList = JsonUtils.jsonToList(result,
+						TbContent.class);
+				return resultList;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		// 根据内容分类id查询内容列表
+		TbContentExample example = new TbContentExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andCategoryIdEqualTo(contentCategoryId);
+		// 执行查询
+		List<TbContent> list = contentMapper.selectByExample(example);
+
+		try {
+			// 向缓存中添加内容
+			String cacheString = JsonUtils.objectToJson(list);
+			jedisClient.hset(INDEX_CONTENT_REDIS_KEY, contentCategoryId + "",
+					cacheString);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return list;
+	}
+
+	/**
+	 * redisServiceImpl.java
+	 * 前台修改内容时调用此服务，删除redis中的该内容的内容分类下的全部内容
+	 */
+	@Override
+	public TaotaoResult syncContent(long contentCategoryId) {
+		try {
+			jedisClient.hdel(INDEX_CONTENT_REDIS_KEY, contentCategoryId + "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		return TaotaoResult.ok();
+	}
+```
+
         
 
 
