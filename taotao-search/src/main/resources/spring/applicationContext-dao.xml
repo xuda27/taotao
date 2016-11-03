@@ -34,4 +34,7 @@
 	<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer"> 
 		<constructor-arg name="baseURL" value="http://123.207.27.28:8080/solr/collection1"></constructor-arg>
 	</bean>
+	
+	<!-- 扫描包加载dao实现类 -->
+	<context:component-scan base-package="cn.eden.taotao.search.dao" />
 </beans>
