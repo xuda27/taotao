@@ -249,8 +249,173 @@
 		return TaotaoResult.ok();
 	}
 ```
+## day08
+-  将数据库商品信息导入到solr索引库中
+	- 技术要点1：
+		1. 查询数据库中的商品信息 商品信息对应solr的业务字段，并创建相应的pojo，需要查询mysql中tb_item、tb_item_cat、tb_item_desc三表。
+		2. 业务部分参见ItemServiceImpl.java
 
-        
+``` sql
+SELECT
+	a.id,
+	a.title,
+	a.sell_point,
+	a.price,
+	a.image,
+	b.`name` category_name,
+	c.item_desc
+FROM
+	tb_item a
+LEFT JOIN tb_item_cat b ON a.cid = b.id
+LEFT JOIN tb_item_desc c ON a.id = c.item_id
+
+```
+``` xml
+<!-- solr业务字段 -->
+<field name="item_title" type="text_ik" indexed="true" stored="true"/>
+<field name="item_sell_point" type="text_ik" indexed="true" stored="true"/>
+<field name="item_price"  type="long" indexed="true" stored="true"/>
+<field name="item_image" type="string" indexed="false" stored="true" />
+<field name="item_category_name" type="string" indexed="true" stored="true" />
+<field name="item_desc" type="text_ik" indexed="true" stored="false" />
+<field name="item_keywords" type="text_ik" indexed="true" stored="false" multiValued="true"/>
+<copyField source="item_title" dest="item_keywords"/>
+<copyField source="item_sell_point" dest="item_keywords"/>
+<copyField source="item_category_name" dest="item_keywords"/>
+<copyField source="item_desc" dest="item_keywords"/>	
+```
+``` java
+//sql语句业务字段对应的pojo
+public class Item {
+
+	private String id;
+	private String title;
+	private String sell_point;
+	private long price;
+	private String image;
+	private String category_name;
+	private String item_des;
+}
+```
+- 发布搜索服务，对外提供一个get形式的服务，调用此服务时需要查询条件，分页条件可以使用page（要显示第几页）、rows（每页显示的记录数）。
+	- 技术要点2：
+		1. 对外提供http形式的get请求服务。请求的url：`/search/query?q={查询条件}&page={page}&rows={rows}`
+		2. 需要创建一个搜索结果的pojo
+		3. dao层查询solr索引库返回pojo
+		4. service层设置查询条件
+		5. controller层设置默认的当前页和默认的每页显示的记录数
+		6. 详细参见SearchDao、SearchService、SearchController
+
+``` java
+//搜索结果pojo
+public class SearchResult {
+	// 商品列表
+	private List<Item> Items;
+	// 总记录数
+	private long recordCount;
+	// 总页数
+	private long pageCount;
+	// 当前页
+	private long currentPage;
+}
+
+//dao
+public SearchResult search(SolrQuery query) {
+	// 创建返回值对象
+	SearchResult result = new SearchResult();
+	// 根据查询条件查询索引库
+	QueryResponse queryResponse = null;
+	try {
+		queryResponse = solrServer.query(query);
+	} catch (SolrServerException e) {
+		e.printStackTrace();
+		throw new RuntimeException(e);
+	}
+	// 取查询结果
+	SolrDocumentList documentList = queryResponse.getResults();
+	// 取查询结果总数量，并加入result中
+	result.setRecordCount(documentList.getNumFound());
+	// 商品列表
+	List<Item> items = new ArrayList<Item>();
+	// 取高亮显示
+	Map<String, Map<String, List<String>>> hightLighting = queryResponse
+	.getHighlighting();
+	// 取商品列表
+	for (SolrDocument document : documentList) {
+		// 创建商品对象
+		Item item = new Item();
+		item.setId((String) document.get("id"));
+		// 取高亮显示的结果
+		List<String> list = hightLighting.get(document.get("id")).get("item_title");
+		String title = "";
+		if (list != null && list.size() > 0) {
+			title = list.get(0);
+		} else {
+			title = (String) document.get("item_title");
+		}
+		item.setTitle(title);
+		item.setImage((String) document.get("item_image"));
+		item.setPrice((long) document.get("item_price"));
+		item.setSell_point((String) document.get("item_sell_point"));
+		item.setCategory_name((String) document.get("item_category_name"));
+		// 添加的商品列表
+		items.add(item);
+	}
+	result.setItems(items);
+	return result;
+}
+
+//service
+public SearchResult search(String queryString, int page, int rows) {
+	// 创建查询对象
+	SolrQuery query = new SolrQuery();
+	// 设置查询条件
+	query.setQuery(queryString);
+	// 设置分页 默认是每页10条
+	query.setStart((page - 1) * rows);
+	query.setRows(rows);
+	// 设置默认搜索域
+	query.set("df", "item_keywords");
+	// 设置高亮显示
+	query.setHighlight(true);
+	query.addHighlightField("item_title");
+	query.setHighlightSimplePre("<em style=\"color:red\">");
+	query.setHighlightSimplePost("</em>");
+	// 执行查询
+	SearchResult searchResult = searchDao.search(query);
+	// 计算查询结果总页数
+	long recordCount = searchResult.getRecordCount();
+	long pageCount = recordCount / rows;
+	if (recordCount % rows > 0) {
+		pageCount++;
+	}
+	// 总页数
+	searchResult.setPageCount(pageCount);
+	// 当前页码
+	searchResult.setCurrentPage(page);
+	return searchResult;
+}
+
+//controller
+@RequestMapping(value = "/query", method = RequestMethod.GET)
+@ResponseBody
+TaotaoResult search(@RequestParam("q") String queryString,@RequestParam(defaultValue = "1") Integer page,@RequestParam(defaultValue = "40") Integer rows) {
+	// 查询条件不能为空
+	if (StringUtils.isBlank(queryString)) {
+		return TaotaoResult.build(400, "查询条件不能为空");
+	}
+	SearchResult searchResult = null;
+	try {
+		// 解决get乱码问题
+		searchResult = searchService.search(
+				new String(queryString.getBytes("iso8859-1"), "utf-8"),page, rows);
+	} catch (UnsupportedEncodingException e) {
+		e.printStackTrace();
+		return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+	}
+	return TaotaoResult.ok(searchResult);
+}
+```
 
 
       
