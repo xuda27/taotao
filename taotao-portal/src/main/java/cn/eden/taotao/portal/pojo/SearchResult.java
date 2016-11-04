@@ -1,7 +1,6 @@
-package cn.eden.taotao.search.pojo;
+package cn.eden.taotao.portal.pojo;
 
 import java.util.List;
-
 
 /**
  * 商品 查询的结果
@@ -12,7 +11,6 @@ import java.util.List;
 public class SearchResult {
 	// 商品列表
 	private List<Item> items;
-	
 	// 总记录数
 	private long recordCount;
 	// 总页数
