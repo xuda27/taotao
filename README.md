@@ -416,7 +416,10 @@ TaotaoResult search(@RequestParam("q") String queryString,@RequestParam(defaultV
 	return TaotaoResult.ok(searchResult);
 }
 ```
-
+## day09
+不完善的地方：
+1. 后台新增商品后，无法及时更新至solr索引库，需要手动导入，手动导入还是全部导入一遍数据库中的信息。这也不好
+2. 搜索排序不完善，新增加的没有首先进入在搜索后的热点页面
 
       
 
