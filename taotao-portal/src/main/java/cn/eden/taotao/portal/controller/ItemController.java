@@ -29,4 +29,11 @@ public class ItemController {
 		String string = itemService.getItemDescById(itemId);
 		return string;
 	}
+	
+	@RequestMapping(value="/item/param/{itemId}", produces=MediaType.TEXT_HTML_VALUE+";charset=utf-8")
+	@ResponseBody
+	public String getItemParam(@PathVariable Long itemId) {
+		String string = itemService.getItemParamItemById(itemId);
+		return string;
+	}
 }
