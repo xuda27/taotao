@@ -249,7 +249,9 @@
 		return TaotaoResult.ok();
 	}
 ```
+
 ## day08
+
 -  将数据库商品信息导入到solr索引库中
 	- 技术要点1：
 		1. 查询数据库中的商品信息 商品信息对应solr的业务字段，并创建相应的pojo，需要查询mysql中tb_item、tb_item_cat、tb_item_desc三表。
@@ -416,10 +418,78 @@ TaotaoResult search(@RequestParam("q") String queryString,@RequestParam(defaultV
 	return TaotaoResult.ok(searchResult);
 }
 ```
+
 ## day09
-不完善的地方：
-1. 后台新增商品后，无法及时更新至solr索引库，需要手动导入，手动导入还是全部导入一遍数据库中的信息。这也不好
-2. 搜索排序不完善，新增加的没有首先进入在搜索后的热点页面
+
+1. 发布商品信息服务（包括商品基本信息、商品描述、商品规格参数，可用商品id进行查询，参见rest的ItemServiceImpl.java）
+2. 前台门户工程通过httpclient调用rest商品信息服务，参见portal的ItemServiceImpl.java。
+	- 要点：
+		- rest层存商品信息redis的key-value格式为 数据库表名:字段名:字段值 = value(json类型字符串)
+		- 商品基本信息加载后，商品描述延迟一秒加载，规格参数按需（如果点击规格参数项才加载）加载
+		- portal的控制层需要根据item.jsp界面的功能，需要按要求增加逻辑视图model，参见ItemController.java
+
+```javascript
+// 商品规格参数按需加载
+$(function(){
+	//取商品id
+	var itemId = "${item.id}";
+	//给商品规格参数tab页绑定事件
+	$("#p-con-attr").bind("click", function(){
+		
+		itemControl.getItemParam(itemId);
+	});
+	//延迟一秒加载商品描述信息
+	setTimeout(function(){
+		itemControl.getItemDesc(itemId);
+	},1000);
+});
+```
+
+``` java
+//ItemServiceImpl.java
+// 规格参数调用rest服务，并包装数据
+@Override
+public String getItemParamItemById(Long itemId) {
+	String json = HttpClientUtil.doGet(REST_ITEM_URL + "/itemParamItem/" + itemId);
+	if(StringUtils.isBlank(json)){
+		return "";
+	}
+	// 把json转换成java对象
+	TaotaoResult result = TaotaoResult.formatToPojo(json,TbItemParamItem.class);
+	if (result.getStatus() == 200) {
+		TbItemParamItem itemParamItem =(TbItemParamItem) result.getData();
+		String paramData = itemParamItem.getParamData();
+		// 生成html
+		// 把规格参数json数据转换成java对象
+		List<Map> jsonList = JsonUtils.jsonToList(paramData, Map.class);
+		StringBuffer sb = new StringBuffer();
+		sb.append("<table cellpadding=\"0\" cellspacing=\"1\" width=\"100%\" border=\"0\" class=\"Ptable\">\n");
+		sb.append("    <tbody>\n");
+		for (Map m1 : jsonList) {
+			sb.append("        <tr>\n");
+			sb.append("            <th class=\"tdTitle\" colspan=\"2\">" + m1.get("group") + "</th>\n");
+			sb.append("        </tr>\n");
+			List<Map> list2 = (List<Map>) m1.get("params");
+			for (Map m2 : list2) {
+				sb.append("        <tr>\n");
+				sb.append("            <td class=\"tdTitle\">" + m2.get("k") + "</td>\n");
+				sb.append("            <td>" + m2.get("v") + "</td>\n");
+				sb.append("        </tr>\n");
+			}
+		}
+		sb.append("    </tbody>\n");
+		sb.append("</table>");
+		// 返回html片段
+		return sb.toString();
+	}
+	return "";
+}
+
+```
+
+- 不完善的地方：
+	1. 后台新增商品后，无法及时更新至solr索引库，需要手动导入，手动导入还是全部导入一遍数据库中的信息。这也不好
+	2. 搜索排序不完善，新增加的没有首先进入在搜索后的热点页面
 
       
 

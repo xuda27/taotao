@@ -15,22 +15,25 @@ import cn.eden.taotao.portal.service.ItemService;
 public class ItemController {
 	@Autowired
 	private ItemService itemService;
-	
+
 	@RequestMapping("/item/{itemId}")
 	public String showItem(@PathVariable Long itemId, Model model) {
 		TbItem item = itemService.getItemById(itemId);
 		model.addAttribute("item", item);
 		return "item";
 	}
-	
-	@RequestMapping(value="/item/desc/{itemId}", produces=MediaType.TEXT_HTML_VALUE+";charset=utf-8")
+
+	// 防止ajax请求的中文乱码
+	@RequestMapping(value = "/item/desc/{itemId}", produces = MediaType.TEXT_HTML_VALUE
+			+ ";charset=utf-8")
 	@ResponseBody
 	public String getItemDesc(@PathVariable Long itemId) {
 		String string = itemService.getItemDescById(itemId);
 		return string;
 	}
-	
-	@RequestMapping(value="/item/param/{itemId}", produces=MediaType.TEXT_HTML_VALUE+";charset=utf-8")
+
+	@RequestMapping(value = "/item/param/{itemId}", produces = MediaType.TEXT_HTML_VALUE
+			+ ";charset=utf-8")
 	@ResponseBody
 	public String getItemParam(@PathVariable Long itemId) {
 		String string = itemService.getItemParamItemById(itemId);
