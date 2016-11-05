@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import cn.eden.taotao.pojo.TbItem;
+import cn.eden.taotao.pojo.TbItemDesc;
 import cn.eden.taotao.portal.service.ItemService;
 import cn.eden.taotao.util.HttpClientUtil;
 import cn.eden.taotao.util.JsonUtils;
@@ -31,6 +32,19 @@ public class ItemServiceImpl implements ItemService {
 			if(result.getStatus() == 200) {
 				TbItem item = (TbItem) result.getData();
 				return item;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getItemDescById(Long itemId) {
+		String json = HttpClientUtil.doGet(REST_ITEM_URL + "/itemDesc/" + itemId);
+		if (!StringUtils.isBlank(json)) {
+			TaotaoResult result = TaotaoResult.formatToPojo(json, TbItemDesc.class);
+			if(result.getStatus() == 200) {
+				TbItemDesc itemDesc = (TbItemDesc) result.getData();
+				return itemDesc.getItemDesc();
 			}
 		}
 		return null;

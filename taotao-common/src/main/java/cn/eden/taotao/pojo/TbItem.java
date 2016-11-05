@@ -4,123 +4,128 @@ import java.util.Date;
 
 /**
  * 实体类
+ * 
  * @author eden
  *
  */
 public class TbItem {
-    private Long id;
+	private Long id;
 
-    private String title;
+	private String title;
 
-    private String sellPoint;
+	private String sellPoint;
 
-    private Long price;
+	private Long price;
 
-    private Integer num;
+	private Integer num;
 
-    private String barcode;
+	private String barcode;
 
-    private String image;
+	private String image;
 
-    private Long cid;
+	private Long cid;
 
-    private Byte status;
+	private Byte status;
 
-    private Date created;
+	private Date created;
 
-    private Date updated;
-    
-    private String[] images;
-    
+	private Date updated;
+
+	private String[] images;
+
 	public Long getId() {
-        return id;
-    }
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
-    }
+	public void setTitle(String title) {
+		this.title = title == null ? null : title.trim();
+	}
 
-    public String getSellPoint() {
-        return sellPoint;
-    }
+	public String getSellPoint() {
+		return sellPoint;
+	}
 
-    public void setSellPoint(String sellPoint) {
-        this.sellPoint = sellPoint == null ? null : sellPoint.trim();
-    }
+	public void setSellPoint(String sellPoint) {
+		this.sellPoint = sellPoint == null ? null : sellPoint.trim();
+	}
 
-    public Long getPrice() {
-        return price;
-    }
+	public Long getPrice() {
+		return price;
+	}
 
-    public void setPrice(Long price) {
-        this.price = price;
-    }
+	public void setPrice(Long price) {
+		this.price = price;
+	}
 
-    public Integer getNum() {
-        return num;
-    }
+	public Integer getNum() {
+		return num;
+	}
 
-    public void setNum(Integer num) {
-        this.num = num;
-    }
+	public void setNum(Integer num) {
+		this.num = num;
+	}
 
-    public String getBarcode() {
-        return barcode;
-    }
+	public String getBarcode() {
+		return barcode;
+	}
 
-    public void setBarcode(String barcode) {
-        this.barcode = barcode == null ? null : barcode.trim();
-    }
+	public void setBarcode(String barcode) {
+		this.barcode = barcode == null ? null : barcode.trim();
+	}
 
-    public String getImage() {
-        return image;
-    }
+	public String getImage() {
+		return image;
+	}
 
-    public void setImage(String image) {
-        this.image = image == null ? null : image.trim();
-    }
+	public void setImage(String image) {
+		this.image = image == null ? null : image.trim();
+	}
 
-    public Long getCid() {
-        return cid;
-    }
+	public Long getCid() {
+		return cid;
+	}
 
-    public void setCid(Long cid) {
-        this.cid = cid;
-    }
+	public void setCid(Long cid) {
+		this.cid = cid;
+	}
 
-    public Byte getStatus() {
-        return status;
-    }
+	public Byte getStatus() {
+		return status;
+	}
 
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
+	public void setStatus(Byte status) {
+		this.status = status;
+	}
 
-    public Date getCreated() {
-        return created;
-    }
+	public Date getCreated() {
+		return created;
+	}
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 
-    public Date getUpdated() {
-        return updated;
-    }
+	public Date getUpdated() {
+		return updated;
+	}
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
-    
-    public String[] getImages() {
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public String[] getImages() {
+		if (images == null && image != null) {
+			String[] pics = image.split(",");
+			return pics;
+		}
 		return images;
 	}
 
