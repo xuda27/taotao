@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.eden.taotao.rest.service.ItemService;
 import cn.eden.taotao.util.TaotaoResult;
 
+/**
+ * 商品信息服务发布url
+ * @author Eden
+ *
+ */
 @Controller
 public class ItemController {
 	@Autowired
@@ -20,4 +25,15 @@ public class ItemController {
 		return itemService.getItem(itemId);
 	}
 	
+	@RequestMapping("/itemDesc/{itemId}")
+	@ResponseBody
+	public TaotaoResult getItemDesc(@PathVariable Long itemId) {
+		return itemService.getItemDesc(itemId);
+	}
+	
+	@RequestMapping("/itemParamItem/{itemId}")
+	@ResponseBody
+	public TaotaoResult getItemParamItem(@PathVariable Long itemId) {
+		return itemService.getItemParamItem(itemId);
+	}
 }
