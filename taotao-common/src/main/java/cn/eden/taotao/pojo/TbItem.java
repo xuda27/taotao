@@ -29,8 +29,10 @@ public class TbItem {
     private Date created;
 
     private Date updated;
-
-    public Long getId() {
+    
+    private String[] images;
+    
+	public Long getId() {
         return id;
     }
 
@@ -117,4 +119,13 @@ public class TbItem {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+    
+    public String[] getImages() {
+		return images;
+	}
+
+	public void setImages(String[] images) {
+		this.images = images;
+	}
+
 }
