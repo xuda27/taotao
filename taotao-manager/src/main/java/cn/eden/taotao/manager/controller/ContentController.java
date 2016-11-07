@@ -27,4 +27,10 @@ public class ContentController {
 	public TaotaoResult insertContent(TbContent content) {
 		return contentService.insertContent(content);
 	}
+	
+	@RequestMapping("/content/delete")
+	@ResponseBody
+	public TaotaoResult deleteContent(String ids) {
+		return contentService.deleteContent(ids);
+	}
 }

@@ -1,5 +1,6 @@
 package cn.eden.taotao.manager.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import cn.eden.taotao.manager.service.ContentService;
 import cn.eden.taotao.mapper.TbContentMapper;
 import cn.eden.taotao.pojo.TbContent;
 import cn.eden.taotao.pojo.TbContentExample;
+import cn.eden.taotao.pojo.TbContentExample.Criteria;
 import cn.eden.taotao.pojo.TbItem;
 import cn.eden.taotao.pojo.TbItemExample;
 import cn.eden.taotao.util.ExceptionUtil;
@@ -62,6 +64,24 @@ public class ContentServiceImpl implements ContentService {
 			HttpClientUtil.doGet(REST_BASE_URL + REST_CONTENT_SYNC_URL + content.getCategoryId());
 		} catch (Exception e) {
 			e.printStackTrace();
+			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		return TaotaoResult.ok();
+	}
+
+	@Override
+	public TaotaoResult deleteContent(String ids) {
+		try {
+			String[] idsArray = ids.split(",");
+			List<Long> values = new ArrayList<Long>();
+			for(String id : idsArray) {
+				values.add(Long.parseLong(id));
+			}
+			TbContentExample example = new TbContentExample();
+			Criteria criteria = example.createCriteria();
+			criteria.andIdIn(values);
+			contentMapper.deleteByExample(example);
+		} catch (NumberFormatException e) {
 			return TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
 		}
 		return TaotaoResult.ok();

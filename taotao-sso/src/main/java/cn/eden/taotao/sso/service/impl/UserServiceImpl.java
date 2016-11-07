@@ -15,6 +15,7 @@ import cn.eden.taotao.pojo.TbUserExample;
 import cn.eden.taotao.pojo.TbUserExample.Criteria;
 import cn.eden.taotao.sso.dao.JedisClient;
 import cn.eden.taotao.sso.service.UserService;
+import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.JsonUtils;
 import cn.eden.taotao.util.TaotaoResult;
 
@@ -116,15 +117,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public TaotaoResult getUserByToken(String token) {
 		// 根据token从redis中查询用户信息
-		String json  =  jedisClient.get(REDIS_USER_SESSION_KEY + ":" + token);
+		String json = jedisClient.get(REDIS_USER_SESSION_KEY + ":" + token);
 		// 判断是否为空
-		if(StringUtils.isBlank(json)) {
+		if (StringUtils.isBlank(json)) {
 			return TaotaoResult.build(400, "用户信息已经过期");
 		}
 		// 更新过期时间
-		jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + token, SSO_SESSION_EXPIRE);
+		jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + token,
+				SSO_SESSION_EXPIRE);
 		// 返回用户信息
 		return TaotaoResult.ok(JsonUtils.jsonToPojo(json, TbUser.class));
+	}
+
+	@Override
+	public TaotaoResult userLogout(String token) {
+		// 根据token从redis删除用户信息
+		jedisClient.del(REDIS_USER_SESSION_KEY + ":" + token);
+		// 返回用户信息
+		return TaotaoResult.ok();
 	}
 
 }

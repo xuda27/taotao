@@ -7,4 +7,5 @@ import cn.eden.taotao.util.TaotaoResult;
 public interface ContentService {
 	DataGridResult getContentsByPage(long page, long pageSize);
 	TaotaoResult insertContent(TbContent content);
+	TaotaoResult deleteContent(String ids);
 }

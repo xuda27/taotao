@@ -43,7 +43,7 @@ public class ContentCategoryController {
 	 * @param id
 	 * @return TaotaoResult
 	 */
-	@RequestMapping(value = "/content/category/delete", method = RequestMethod.POST)
+	@RequestMapping("/content/category/delete")
 	@ResponseBody
 	TaotaoResult deleteContentCategory(Long parentId, Long id) {
 		return contentCategoryService.deleteContentCategory(parentId, id);

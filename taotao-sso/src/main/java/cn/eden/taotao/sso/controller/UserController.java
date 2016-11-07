@@ -122,4 +122,32 @@ public class UserController {
 			return mappingJacksonValue;
 		}
 	}
+
+	/**
+	 * 接受Token调用Service安全退出，判断是否是jsonp调用，按需返回值
+	 * 
+	 * @param token
+	 * @param callback
+	 * @return Object
+	 */
+	@RequestMapping("/logout/{token}")
+	@ResponseBody
+	public Object userLogout(@PathVariable String token, String callback) {
+		TaotaoResult result = null;
+		try {
+			result = userService.userLogout(token);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
+		}
+		// 判断是否为jsonp调用
+		if (StringUtils.isBlank(callback)) {
+			return result;
+		} else {
+			MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(
+					result);
+			mappingJacksonValue.setJsonpFunction(callback);
+			return mappingJacksonValue;
+		}
+	}
 }
