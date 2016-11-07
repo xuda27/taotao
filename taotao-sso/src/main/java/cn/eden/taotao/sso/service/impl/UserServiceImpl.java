@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 		TbUser user = list.get(0);
 		// 对比密码
 		if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(
-				user.getPassword().getBytes())) {
+				user.getPassword())) {
 			return TaotaoResult.build(400, "密码错误");
 		}
 		// 生成 token
