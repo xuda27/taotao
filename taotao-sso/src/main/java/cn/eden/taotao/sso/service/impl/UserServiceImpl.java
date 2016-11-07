@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import cn.eden.taotao.pojo.TbUserExample;
 import cn.eden.taotao.pojo.TbUserExample.Criteria;
 import cn.eden.taotao.sso.dao.JedisClient;
 import cn.eden.taotao.sso.service.UserService;
+import cn.eden.taotao.util.CookieUtils;
 import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.JsonUtils;
 import cn.eden.taotao.util.TaotaoResult;
@@ -81,7 +85,8 @@ public class UserServiceImpl implements UserService {
 	 * 用户登录
 	 */
 	@Override
-	public TaotaoResult userLogin(String username, String password) {
+	public TaotaoResult userLogin(HttpServletRequest request,
+			HttpServletResponse response, String username, String password) {
 		// 设置查询条件
 		TbUserExample example = new TbUserExample();
 		Criteria criteria = example.createCriteria();
@@ -107,6 +112,8 @@ public class UserServiceImpl implements UserService {
 		// 设置session的过期时间
 		jedisClient.expire(REDIS_USER_SESSION_KEY + ":" + uuid,
 				SSO_SESSION_EXPIRE);
+		// 设置Cookie Cookie key-value为TT_TOKEN：Token值，默认有效时间为当前会话中
+		CookieUtils.setCookie(request, response, "TT_TOKEN", uuid);
 		// 返回token
 		return TaotaoResult.ok(uuid);
 	}
