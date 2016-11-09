@@ -1,5 +1,11 @@
 package cn.eden.taotao.portal.pojo;
 
+/**
+ * 购物车商品字段
+ * 
+ * @author Eden
+ *
+ */
 public class CartItem {
 	private long id;
 	private String title;

@@ -12,6 +12,7 @@ import cn.eden.taotao.util.ExceptionUtil;
 import cn.eden.taotao.util.TaotaoResult;
 
 @Controller
+@RequestMapping("/order")
 public class OrderController {
 
 	@Autowired
