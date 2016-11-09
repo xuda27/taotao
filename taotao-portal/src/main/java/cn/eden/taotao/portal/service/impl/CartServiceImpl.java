@@ -34,12 +34,36 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public TaotaoResult addCartItem(long itemId, int num,
 			HttpServletRequest request, HttpServletResponse response) {
-		CartItem cartItem = null;
 		// 取购物车商品列表
 		List<CartItem> itemList = getCartItems(request);
+		// 如果购物车不存在
+		if (itemList == null || itemList.size() == 0) {
+			String json = HttpClientUtil.doGet(REST_ITEM_URL + ITEM_INFO_URL
+					+ itemId);
+			// 把json转换成java对象
+			TaotaoResult taotaoResult = TaotaoResult.formatToPojo(json,
+					TbItem.class);
+			if (taotaoResult.getStatus() == 200) {
+				CartItem cartItem = new CartItem();
+				TbItem tbItem = (TbItem) taotaoResult.getData();
+				cartItem.setId(tbItem.getId());
+				cartItem.setTitle(tbItem.getTitle());
+				cartItem.setNum(num);
+				cartItem.setPrice(tbItem.getPrice());
+				cartItem.setImage(tbItem.getImage() == null ? "" : tbItem
+						.getImage().split(",")[0]);
+				// 添加到购物车列表
+				itemList.add(cartItem);
+			}
+			// 把购物车列表写入cookie
+			CookieUtils.setCookie(request, response, "TT_CART",
+					JsonUtils.objectToJson(itemList), true);
+			return TaotaoResult.ok();
+		}
 
 		// 判断购物车商品列表中是否存在此商品，
 		for (CartItem item : itemList) {
+			CartItem cartItem = null;
 			// 1.如果存在则添加商品数量
 			if (item.getId() == itemId) {
 				item.setNum(item.getNum() + num);
@@ -63,25 +87,6 @@ public class CartServiceImpl implements CartService {
 					cartItem.setImage(tbItem.getImage() == null ? "" : tbItem
 							.getImage().split(",")[0]);
 				}
-			}
-			// 添加到购物车列表
-			itemList.add(cartItem);
-		}
-		if (itemList == null || itemList.size() == 0) {
-			cartItem = new CartItem();
-			String json = HttpClientUtil.doGet(REST_ITEM_URL + ITEM_INFO_URL
-					+ itemId);
-			// 把json转换成java对象
-			TaotaoResult taotaoResult = TaotaoResult.formatToPojo(json,
-					TbItem.class);
-			if (taotaoResult.getStatus() == 200) {
-				TbItem tbItem = (TbItem) taotaoResult.getData();
-				cartItem.setId(tbItem.getId());
-				cartItem.setTitle(tbItem.getTitle());
-				cartItem.setNum(num);
-				cartItem.setPrice(tbItem.getPrice());
-				cartItem.setImage(tbItem.getImage() == null ? "" : tbItem
-						.getImage().split(",")[0]);
 			}
 			// 添加到购物车列表
 			itemList.add(cartItem);
@@ -119,18 +124,18 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public TaotaoResult deleteCartItem(long itemId, HttpServletRequest request,
 			HttpServletResponse response) {
-		//从cookie中去购物车商品列表
+		// 从cookie中去购物车商品列表
 		List<CartItem> itemList = getCartItems(request);
-		//从列表中找到此商品
-		for(CartItem cartItem : itemList) {
-			if(cartItem.getId() == itemId) {
+		// 从列表中找到此商品
+		for (CartItem cartItem : itemList) {
+			if (cartItem.getId() == itemId) {
 				itemList.remove(cartItem);
 				break;
 			}
 		}
-		CookieUtils.setCookie(request, response, "TT_CART", JsonUtils.objectToJson(itemList), true);
+		CookieUtils.setCookie(request, response, "TT_CART",
+				JsonUtils.objectToJson(itemList), true);
 		return TaotaoResult.ok();
 	}
 
-	
 }

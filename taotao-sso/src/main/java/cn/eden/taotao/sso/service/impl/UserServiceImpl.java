@@ -136,6 +136,9 @@ public class UserServiceImpl implements UserService {
 		return TaotaoResult.ok(JsonUtils.jsonToPojo(json, TbUser.class));
 	}
 
+	/**
+	 * 用户安全退出
+	 */
 	@Override
 	public TaotaoResult userLogout(String token) {
 		// 根据token从redis删除用户信息

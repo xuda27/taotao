@@ -17,6 +17,7 @@ import cn.eden.taotao.portal.service.CartService;
 import cn.eden.taotao.util.TaotaoResult;
 
 @Controller
+@RequestMapping("/cart")
 public class CartController {
 
 	@Autowired
@@ -25,16 +26,19 @@ public class CartController {
 	/**
 	 * 添加购物车商品成功
 	 */
-	@RequestMapping("/cart/add/{itemId}")
+	@RequestMapping("/add/{itemId}")
 	public String addCartItem(@PathVariable Long itemId,
 			@RequestParam(defaultValue = "1") Integer num,
 			HttpServletRequest request, HttpServletResponse response) {
 		TaotaoResult result = cartService.addCartItem(itemId, num, request,
 				response);
-		return "cartSuccess";
+		if(result.getStatus() == 200) 
+			return "cartSuccess";
+		else
+			return null;
 	}
 
-	@RequestMapping("/cart/cart")
+	@RequestMapping("/cart")
 	public String showCart(HttpServletRequest request, Model model) {
 		List<CartItem> list = cartService.getCartItems(request);
 		model.addAttribute("cartList", list);

@@ -94,7 +94,8 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public TaotaoResult userLogin(HttpServletRequest request, HttpServletResponse response, String username, String password) {
+	public TaotaoResult userLogin(HttpServletRequest request,
+			HttpServletResponse response, String username, String password) {
 		return userService.userLogin(request, response, username, password);
 	}
 
@@ -127,15 +128,12 @@ public class UserController {
 	}
 
 	/**
-	 * 接受Token调用Service安全退出，判断是否是jsonp调用，按需返回值
+	 * 接受Token调用Service安全退出
 	 * 
 	 * @param token
-	 * @param callback
-	 * @return Object
 	 */
 	@RequestMapping("/logout/{token}")
-	@ResponseBody
-	public Object userLogout(@PathVariable String token, String callback) {
+	public String userLogout(@PathVariable String token) {
 		TaotaoResult result = null;
 		try {
 			result = userService.userLogout(token);
@@ -143,14 +141,9 @@ public class UserController {
 			e.printStackTrace();
 			result = TaotaoResult.build(500, ExceptionUtil.getStackTrace(e));
 		}
-		// 判断是否为jsonp调用
-		if (StringUtils.isBlank(callback)) {
-			return result;
-		} else {
-			MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(
-					result);
-			mappingJacksonValue.setJsonpFunction(callback);
-			return mappingJacksonValue;
+		if (result.getStatus() == 200) {
+			return "login";
 		}
+		return null;
 	}
 }

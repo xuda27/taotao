@@ -99,7 +99,9 @@
 			```
 		5. 具体业务实现参见ItemCatServiceImpl.java
 		6. 为了防止数据的乱码问题，在Controller的requestMapping中添加如下：
-		`@RequestMapping(value="/itemcat/all", produces=MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")`
+		```java
+			@RequestMapping(value="/itemcat/all", produces=MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+		```
 
 ## day06
 
@@ -490,6 +492,16 @@ public String getItemParamItemById(Long itemId) {
 - 不完善的地方：
 	1. 后台新增商品后，无法及时更新至solr索引库，需要手动导入，手动导入还是全部导入一遍数据库中的信息。这也不好
 	2. 搜索排序不完善，新增加的没有首先进入在搜索后的热点页面
+
+## day10
+
+1. 发布单点登录系统sso（用户登录，数据校验，用户注册，安全退出）
+2. 用户登录后，使用UUID生成一个Token，以Token作为键，用户信息json作为值，存入到redis中；并在Cookie中设置以"TT_TOKEN"作为键，token值作为值存在Cookie中。以后则可以直接通过token值查询用户信息。
+3. 门户系统当用户下订单时需要用户登录，使用拦截器实现，并有回调：拦截器首先需要判断用户是否登录，可以从cookie中取出token值，并用token取出user值，如果没有user值，则可以判断用户未登录，跳转至登录页面。
+4. 购物车的实现（portal中的CartServiceImpl.java）
+	1. 通过Cookie取到"TT_CAET"的购物车商品json值
+	2. 如果没有添加商品，则创建CartItem的Pojo，并创建购物车list添加进去；如果有购物车，没有此商品则创建CartItem，添加至购物车；如果购物车中存在此商品，则增加相应数量。
+	3. 删除购物车商品，直接根据itemId查询商品信息，从购物车list中remove该商品的cartItem。
 
       
 
