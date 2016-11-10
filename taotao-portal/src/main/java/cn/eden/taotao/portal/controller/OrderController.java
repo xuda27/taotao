@@ -46,9 +46,10 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String createOrder(Order order, Model model) {
+	public String createOrder(Order order, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
 		try {
-			String orderId = orderService.createOrder(order);
+			String orderId = orderService.createOrder(order, request, response);
 			model.addAttribute("orderId", orderId);
 			model.addAttribute("payment", order.getPayment());
 			// 增加3天
