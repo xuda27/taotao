@@ -41,6 +41,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 					+ request.getRequestURL());
 			return false;
 		}
+		//设置request的user对象 方便下一个页面取user信息
+		request.setAttribute("user", user);
 		// 2.取到用户信息，放行
 		return true;
 	}

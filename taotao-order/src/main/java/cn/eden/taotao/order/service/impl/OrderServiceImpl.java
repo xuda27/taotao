@@ -62,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setUpdateTime(date);
 		// 0：未评价 1：已评价
 		order.setBuyerRate(0);
+		orderMapper.insert(order);
 		// 插入订单明细
 		for (TbOrderItem orderItem : orderItems) {
 			// 补全订单明细

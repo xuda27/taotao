@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import cn.eden.taotao.pojo.TbUser;
 import cn.eden.taotao.portal.pojo.Order;
 import cn.eden.taotao.portal.service.OrderService;
 import cn.eden.taotao.util.CookieUtils;
@@ -23,6 +24,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public String createOrder(Order order, HttpServletRequest request,
 			HttpServletResponse response) {
+		// 从request中取出user信息
+		TbUser user = (TbUser) request.getAttribute("user");
+		//order对象补全信息
+		order.setUserId(user.getId());
+		order.setBuyerNick(user.getUsername());
 		// 调用taotao-order的服务 提交订单
 		String json = HttpClientUtil.doPostJson(ORDER_BASE_URL
 				+ ORDER_CREATE_URL, JsonUtils.objectToJson(order));
