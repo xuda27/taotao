@@ -31,7 +31,7 @@ public class ContentCategoryController {
 		return contentCategoryService.getCategoryList(parentId);
 	}
 
-	@RequestMapping(value = "/content/category/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/content/category/create", method = RequestMethod.POST )
 	@ResponseBody
 	TaotaoResult insertContentCategory(Long parentId, String name) {
 		return contentCategoryService.insertContentCategory(parentId, name);

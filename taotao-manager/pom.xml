@@ -100,6 +100,9 @@
 				<configuration>
 					<port>8080</port>
 					<path>/</path>
+					<url>http://123.207.27.28:8080/manager/text</url>
+					<username>eden</username>
+					<password>eden</password>
 				</configuration>
 			</plugin>
 		</plugins>
